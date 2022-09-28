@@ -2,16 +2,21 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.MovingEntity.Mover;
+import uet.oop.bomberman.entities.MovingEntity.State;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +28,10 @@ public class BombermanGame extends Application {
     
     private GraphicsContext gc;
     private Canvas canvas;
+    private Scene scene;
+    Mover bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
-
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -42,15 +48,16 @@ public class BombermanGame extends Application {
         root.getChildren().add(canvas);
 
         // Tao scene
-        Scene scene = new Scene(root);
+        scene = new Scene(root);
 
         // Them scene vao stage
         stage.setScene(scene);
-        stage.show();
 
+        stage.show();
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                HandleInput();
                 render();
                 update();
             }
@@ -59,8 +66,47 @@ public class BombermanGame extends Application {
 
         createMap();
 
-        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+
         entities.add(bomberman);
+    }
+
+    public void HandleInput() {
+        EventHandler<KeyEvent> eventHandler1 = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent e) {
+                switch (e.getCode()) {
+                    case UP:
+                        bomberman.setState(State.UP);
+                        break;
+                    case DOWN:
+                        bomberman.setState(State.DOWN);
+                        break;
+                    case LEFT:
+                        bomberman.setState(State.LEFT);
+                        break;
+                    case RIGHT:
+                        bomberman.setState(State.RIGHT);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler1);
+        EventHandler<KeyEvent> eventHandler2 = new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent e) {
+                switch (e.getCode()) {
+                    case UP:
+                    case DOWN:
+                    case LEFT:
+                    case RIGHT:
+                        bomberman.setState(State.STOP);
+                    default:
+                        break;
+                }
+            }
+        };
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, eventHandler2);
     }
 
     public void createMap() {
