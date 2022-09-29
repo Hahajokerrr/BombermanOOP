@@ -51,14 +51,57 @@ public abstract class Entity {
     }
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
-    public Entity( int xUnit, int yUnit, Image img) {
+    public Entity(int xUnit, int yUnit, Image img) {
         this.x = xUnit * Sprite.SCALED_SIZE;
         this.y = yUnit * Sprite.SCALED_SIZE;
         this.img = img;
     }
 
+    public Entity() {
+
+    }
+
+    public boolean collision(Entity other) {
+        // TODO: Kiem tra va cham cua 2 thuc the.
+        int leftA, leftB;
+        int rightA, rightB;
+        int topA, topB;
+        int bottomA, bottomB;
+
+        //Calculate the sides of rect of this
+        leftA = x;
+        rightA = x + Sprite.SCALED_SIZE;
+        topA = y;
+        bottomA = y + Sprite.SCALED_SIZE;
+
+        //Calculate the sides of rect of other
+        leftB = other.x;
+        rightB = other.x + Sprite.SCALED_SIZE;
+        topB = other.y;
+        bottomB = other.y + Sprite.SCALED_SIZE;
+
+        if (bottomA <= topB) {
+            return false;
+        }
+
+        if (topA >= bottomB) {
+            return false;
+        }
+
+        if (rightA <= leftB) {
+            return false;
+        }
+
+        if (leftA >= rightB) {
+            return false;
+        }
+        //If none of the sides from A are outside B
+        return true;
+    }
+
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
+
     public abstract void update();
 }

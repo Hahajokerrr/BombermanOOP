@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BombermanGame extends Application {
-    
+
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
-    
+
     private GraphicsContext gc;
     private Canvas canvas;
     private Scene scene;
@@ -55,6 +55,9 @@ public class BombermanGame extends Application {
         stage.setScene(scene);
 
         stage.show();
+        createMap();
+        entities.add(bomberman);
+        bomberman.setStillObjects(stillObjects);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -65,10 +68,7 @@ public class BombermanGame extends Application {
         };
         timer.start();
 
-        createMap();
 
-
-        entities.add(bomberman);
     }
 
     public void HandleInput() {
@@ -112,8 +112,8 @@ public class BombermanGame extends Application {
             }
         };
         scene.addEventFilter(KeyEvent.KEY_RELEASED, eventHandler2);
-        System.out.println(bomberman.getState());
     }
+
 
     public void createMap() {
         for (int i = 0; i < WIDTH; i++) {
@@ -121,8 +121,7 @@ public class BombermanGame extends Application {
                 Entity object;
                 if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
-                }
-                else {
+                } else {
                     object = new Grass(i, j, Sprite.grass.getFxImage());
                 }
                 stillObjects.add(object);

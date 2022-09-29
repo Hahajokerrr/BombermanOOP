@@ -10,6 +10,10 @@ public abstract class AnimatedEntity extends Entity{
         super(xUnit, yUnit, img);
     }
 
+    public AnimatedEntity() {
+
+    }
+
     protected void animate() {
         if(animate < MAX_ANIMATE) animate++; else animate = 0;
     }
