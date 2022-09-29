@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
@@ -76,15 +77,19 @@ public class BombermanGame extends Application {
             public void handle(KeyEvent e) {
                 switch (e.getCode()) {
                     case UP:
+                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.UP);
                         break;
                     case DOWN:
+                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.DOWN);
                         break;
                     case LEFT:
+                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.LEFT);
                         break;
                     case RIGHT:
+                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.RIGHT);
                         break;
                     default:
@@ -100,13 +105,14 @@ public class BombermanGame extends Application {
                     case DOWN:
                     case LEFT:
                     case RIGHT:
-                        bomberman.setState(State.STOP);
+                        bomberman.setSpeed(0);
                     default:
                         break;
                 }
             }
         };
         scene.addEventFilter(KeyEvent.KEY_RELEASED, eventHandler2);
+        System.out.println(bomberman.getState());
     }
 
     public void createMap() {

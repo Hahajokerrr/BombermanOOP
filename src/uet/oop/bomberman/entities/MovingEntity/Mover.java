@@ -1,15 +1,17 @@
 package uet.oop.bomberman.entities.MovingEntity;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Entity;
 
-public abstract class Mover extends Entity {
+public abstract class Mover extends AnimatedEntity {
     public Mover(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         state = State.STOP;
         speed = 2;
     }
 
+    public static final int STANDARD_SPEED = 2;
     protected State state;
     protected int speed;
 
