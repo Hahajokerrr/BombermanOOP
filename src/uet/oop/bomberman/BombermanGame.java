@@ -10,6 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import uet.oop.bomberman.entities.Bomb.Bomb;
+import uet.oop.bomberman.entities.Bomb.BombManager;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Tile.Grass;
@@ -26,12 +28,18 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
+    int i = 0;
 
     private GraphicsContext gc;
     private Canvas canvas;
     private Scene scene;
-    Mover bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+    Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+    Bomb bomb1 = new Bomb();
+    Bomb bomb2 = new Bomb();
+    Bomb bomb3 = new Bomb();
+
     private List<Entity> entities = new ArrayList<>();
+    private BombManager bombManager = new BombManager();
     private List<Entity> stillObjects = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -47,6 +55,14 @@ public class BombermanGame extends Application {
         // Tao root container
         Group root = new Group();
         root.getChildren().add(canvas);
+
+        entities.add(bomb1);
+        entities.add(bomb2);
+        entities.add(bomb3);
+
+        bombManager.addBomb(bomb1);
+        bombManager.addBomb(bomb2);
+        bombManager.addBomb(bomb3);
 
         // Tao scene
         scene = new Scene(root);
@@ -77,20 +93,27 @@ public class BombermanGame extends Application {
             public void handle(KeyEvent e) {
                 switch (e.getCode()) {
                     case UP:
+                    case W:
                         bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.UP);
                         break;
                     case DOWN:
+                    case S:
                         bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.DOWN);
                         break;
                     case LEFT:
+                    case A:
                         bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.LEFT);
                         break;
                     case RIGHT:
+                    case D:
                         bomberman.setSpeed(Bomber.STANDARD_SPEED);
                         bomberman.setState(State.RIGHT);
+                        break;
+                    case SPACE:
+                        bombManager.PlaceBomb(bomberman);
                         break;
                     default:
                         break;
@@ -105,7 +128,13 @@ public class BombermanGame extends Application {
                     case DOWN:
                     case LEFT:
                     case RIGHT:
+                    case W:
+                    case A:
+                    case D:
+                    case S:
                         bomberman.setSpeed(0);
+                    case SPACE:
+                        bombManager.DonePlacing();
                     default:
                         break;
                 }
@@ -131,6 +160,7 @@ public class BombermanGame extends Application {
 
     public void update() {
         entities.forEach(Entity::update);
+        bombManager.DetonateBomb();
     }
 
     public void render() {

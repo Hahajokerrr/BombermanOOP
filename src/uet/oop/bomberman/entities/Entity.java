@@ -34,6 +34,14 @@ public abstract class Entity {
         this.y = y;
     }
 
+    public int getXTile() {
+        return (x / Sprite.SCALED_SIZE) * Sprite.SCALED_SIZE;
+    }
+
+    public int getYTile() {
+        return (y / Sprite.SCALED_SIZE) * Sprite.SCALED_SIZE;
+    }
+
     public boolean isRemoved() {
         return removed;
     }
