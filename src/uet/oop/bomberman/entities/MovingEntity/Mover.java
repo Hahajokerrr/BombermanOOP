@@ -3,7 +3,9 @@ package uet.oop.bomberman.entities.MovingEntity;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Bomb.Bomb;
+import uet.oop.bomberman.entities.Bomb.FlameSegment;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Wall;
 
 import java.util.ArrayList;
@@ -14,12 +16,15 @@ public abstract class Mover extends AnimatedEntity {
         super(xUnit, yUnit, img);
         state = State.STOP;
         speed = STANDARD_SPEED;
+        alive = true;
     }
 
+    protected boolean alive;
     public static final int STANDARD_SPEED = 2;
     protected State state;
     protected int speed;
     protected List<Entity> stillObjects = new ArrayList<>();
+    protected List<Entity> entities = new ArrayList<>();
 
     public State getState() {
         return state;
@@ -41,9 +46,21 @@ public abstract class Mover extends AnimatedEntity {
         this.stillObjects = stillObjects;
     }
 
-    public boolean canMove(List<Entity> entityList) {
-        for(int i=0; i<entityList.size(); i++) {
-            if(entityList.get(i) instanceof Wall && this.collision(entityList.get(i))) {
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public boolean canMoveStillObject(List<Entity> entityList) {
+        for (int i = 0; i < entityList.size(); i++) {
+            if (entityList.get(i) instanceof Wall && this.collision(entityList.get(i))) {
                 return (!this.collision(entityList.get(i)));
             }
         }

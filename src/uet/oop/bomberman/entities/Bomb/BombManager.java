@@ -29,14 +29,12 @@ public class BombManager {
         if (isPlacing == false && BombNum < MaxBombNum) {
             for (int i = 0; i < BombList.size(); i++) {
                 if (!BombList.get(i).isPlaced()) {
-                    BombList.get(i).setX(bomber.getXTile());
-                    BombList.get(i).setY(bomber.getYTile());
+                    BombList.get(i).setX(bomber.getXRound());
+                    BombList.get(i).setY(bomber.getYRound());
                     BombList.get(i).setPlaced(true);
                     BombList.get(i).setPlacedTime(System.currentTimeMillis());
                     PlacedBomb.add(BombList.get(i));
-                    System.out.println(i);
                     BombNum = PlacedBomb.size();
-                    //System.out.println(BombNum);
                     isPlacing = true;
                     break;
                 }

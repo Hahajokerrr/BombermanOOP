@@ -34,9 +34,9 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private Scene scene;
     Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-    Bomb bomb1 = new Bomb();
-    Bomb bomb2 = new Bomb();
-    Bomb bomb3 = new Bomb();
+    Bomb bomb1 = new Bomb(bomberman);
+    Bomb bomb2 = new Bomb(bomberman);
+    Bomb bomb3 = new Bomb(bomberman);
 
     private List<Entity> entities = new ArrayList<>();
     private BombManager bombManager = new BombManager();
@@ -60,6 +60,14 @@ public class BombermanGame extends Application {
         entities.add(bomb2);
         entities.add(bomb3);
 
+        for(int i=0; i<4; i++) {
+            for(int j=0; j<3; j++) {
+                entities.add(bomb1.getFlameAt(i).getFlameSegmentAt(j));
+                entities.add(bomb2.getFlameAt(i).getFlameSegmentAt(j));
+                entities.add(bomb3.getFlameAt(i).getFlameSegmentAt(j));
+            }
+        }
+
         bombManager.addBomb(bomb1);
         bombManager.addBomb(bomb2);
         bombManager.addBomb(bomb3);
@@ -74,6 +82,7 @@ public class BombermanGame extends Application {
         createMap();
         entities.add(bomberman);
         bomberman.setStillObjects(stillObjects);
+        bomberman.setEntities(entities);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
