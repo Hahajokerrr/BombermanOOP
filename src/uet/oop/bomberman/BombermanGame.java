@@ -14,6 +14,7 @@ import uet.oop.bomberman.entities.Bomb.Bomb;
 import uet.oop.bomberman.entities.Bomb.BombManager;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.MovingEntity.Enemy.Balloom;
 import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
@@ -38,6 +39,8 @@ public class BombermanGame extends Application {
     Bomb bomb2 = new Bomb(bomberman);
     Bomb bomb3 = new Bomb(bomberman);
 
+    Balloom balloom = new Balloom(6, 1, Sprite.balloom_left1.getFxImage());
+
     private List<Entity> entities = new ArrayList<>();
     private BombManager bombManager = new BombManager();
     private List<Entity> stillObjects = new ArrayList<>();
@@ -59,9 +62,10 @@ public class BombermanGame extends Application {
         entities.add(bomb1);
         entities.add(bomb2);
         entities.add(bomb3);
+        entities.add(balloom);
 
-        for(int i=0; i<4; i++) {
-            for(int j=0; j<3; j++) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
                 entities.add(bomb1.getFlameAt(i).getFlameSegmentAt(j));
                 entities.add(bomb2.getFlameAt(i).getFlameSegmentAt(j));
                 entities.add(bomb3.getFlameAt(i).getFlameSegmentAt(j));
@@ -80,9 +84,14 @@ public class BombermanGame extends Application {
 
         stage.show();
         createMap();
+
         entities.add(bomberman);
         bomberman.setStillObjects(stillObjects);
         bomberman.setEntities(entities);
+
+        balloom.setStillObjects(stillObjects);
+        balloom.setEntities(entities);
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -92,8 +101,6 @@ public class BombermanGame extends Application {
             }
         };
         timer.start();
-
-
     }
 
     public void HandleInput() {
@@ -157,7 +164,7 @@ public class BombermanGame extends Application {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
-                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
+                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1 || (j % 2 == 0 && i % 2 == 0)) {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
                 } else {
                     object = new Grass(i, j, Sprite.grass.getFxImage());

@@ -15,7 +15,7 @@ public class Bomber extends Mover {
 
     private boolean canMove;
     public static final int WIDTH = 24;
-    public static final int HEIGHT = 32;
+    public static final int HEIGHT = 28;
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);

@@ -105,8 +105,6 @@ public class Bomb extends AnimatedEntity {
             if(!this.collision(bomber)) {
                 bomber.setCanMove(true);
                 moveOut++;
-                System.out.println(moveOut);
-                System.out.println(bomber.isCanMove());
             } else if (bomber.collision(this)){
                 if(moveOut == -1) {
                     bomber.setCanMove(true);
@@ -121,7 +119,6 @@ public class Bomb extends AnimatedEntity {
                 flames[i].EraseFlame();
             }
         }
-
     }
 
     @Override

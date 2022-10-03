@@ -57,6 +57,8 @@ public class Flame extends AnimatedEntity {
         }
     }
 
+
+
     public void creatFlame0() {
         for(int i=0; i<radius; i++) {
             switch (direction) {
