@@ -15,7 +15,11 @@ import uet.oop.bomberman.entities.Bomb.BombManager;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.Enemy.Balloom;
+import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Grass;
+import uet.oop.bomberman.entities.Tile.Item.BombItem;
+import uet.oop.bomberman.entities.Tile.Item.FlameItem;
+import uet.oop.bomberman.entities.Tile.Item.SpeedItem;
 import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.MovingEntity.Mover;
@@ -34,15 +38,19 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     private Scene scene;
-    Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+    Bomber bomberman = new Bomber(6, 6, Sprite.player_right.getFxImage());
     Bomb bomb1 = new Bomb(bomberman);
     Bomb bomb2 = new Bomb(bomberman);
     Bomb bomb3 = new Bomb(bomberman);
 
     Balloom balloom = new Balloom(6, 1, Sprite.balloom_left1.getFxImage());
 
+    SpeedItem speedItem = new SpeedItem(8,8,Sprite.powerup_speed.getFxImage());
+    BombItem bombItem = new BombItem(9,9,Sprite.powerup_bombs.getFxImage());
+    FlameItem flameItem = new FlameItem(11,11,Sprite.powerup_flames.getFxImage());
+
     private List<Entity> entities = new ArrayList<>();
-    private BombManager bombManager = new BombManager();
+    //private BombManager bombManager = new BombManager();
     private List<Entity> stillObjects = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -63,6 +71,9 @@ public class BombermanGame extends Application {
         entities.add(bomb2);
         entities.add(bomb3);
         entities.add(balloom);
+        entities.add(speedItem);
+        entities.add(bombItem);
+        entities.add(flameItem);
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
@@ -72,9 +83,9 @@ public class BombermanGame extends Application {
             }
         }
 
-        bombManager.addBomb(bomb1);
-        bombManager.addBomb(bomb2);
-        bombManager.addBomb(bomb3);
+        bomberman.getBombManager().addBomb(bomb1);
+        bomberman.getBombManager().addBomb(bomb2);
+        bomberman.getBombManager().addBomb(bomb3);
 
         // Tao scene
         scene = new Scene(root);
@@ -110,26 +121,26 @@ public class BombermanGame extends Application {
                 switch (e.getCode()) {
                     case UP:
                     case W:
-                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
+                        bomberman.SetCheckedSpeed();
                         bomberman.setState(State.UP);
                         break;
                     case DOWN:
                     case S:
-                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
+                        bomberman.SetCheckedSpeed();
                         bomberman.setState(State.DOWN);
                         break;
                     case LEFT:
                     case A:
-                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
+                        bomberman.SetCheckedSpeed();
                         bomberman.setState(State.LEFT);
                         break;
                     case RIGHT:
                     case D:
-                        bomberman.setSpeed(Bomber.STANDARD_SPEED);
+                        bomberman.SetCheckedSpeed();
                         bomberman.setState(State.RIGHT);
                         break;
                     case SPACE:
-                        bombManager.PlaceBomb(bomberman);
+                        bomberman.getBombManager().PlaceBomb(bomberman);
                         break;
                     default:
                         break;
@@ -150,7 +161,7 @@ public class BombermanGame extends Application {
                     case S:
                         bomberman.setSpeed(0);
                     case SPACE:
-                        bombManager.DonePlacing();
+                        bomberman.getBombManager().DonePlacing();
                     default:
                         break;
                 }
@@ -164,7 +175,7 @@ public class BombermanGame extends Application {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
-                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1 || (j % 2 == 0 && i % 2 == 0)) {
+                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
                 } else {
                     object = new Grass(i, j, Sprite.grass.getFxImage());
@@ -172,11 +183,21 @@ public class BombermanGame extends Application {
                 stillObjects.add(object);
             }
         }
+        for (int i = 1; i < WIDTH; i++) {
+            for (int j = 1; j < HEIGHT; j++) {
+                Entity object;
+                if (j % 5 == 0 && i % 5 == 0) {
+                    object = new Brick(i, j, Sprite.brick.getFxImage());
+                    stillObjects.add(object);
+                }
+            }
+        }
     }
 
     public void update() {
         entities.forEach(Entity::update);
-        bombManager.DetonateBomb();
+        stillObjects.forEach(Entity::update);
+        bomberman.getBombManager().DetonateBomb();
     }
 
     public void render() {

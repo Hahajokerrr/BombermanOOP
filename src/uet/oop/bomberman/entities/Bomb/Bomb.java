@@ -48,12 +48,18 @@ public class Bomb extends AnimatedEntity {
         y = -50;
         bomber = _bomber;
         for (int i = 0; i < 4; i++) {
-            flames[i] = new Flame(this.x, this.y, i, 2);
+            flames[i] = new Flame(this.x, this.y, i, 1);
         }
     }
 
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+    }
+
+    public void setDetonateRadius(int radius) {
+        for(int i=0; i<4; i++) {
+            flames[i].setRadius(radius);
+        }
     }
 
     public boolean DetonateBomb() {

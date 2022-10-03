@@ -5,6 +5,7 @@ import uet.oop.bomberman.entities.AnimatedEntity;
 import uet.oop.bomberman.entities.Bomb.Bomb;
 import uet.oop.bomberman.entities.Bomb.FlameSegment;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Wall;
 
@@ -20,7 +21,7 @@ public abstract class Mover extends AnimatedEntity {
     }
 
     protected boolean alive;
-    public static final int STANDARD_SPEED = 2;
+    public static final int STANDARD_SPEED = 1;
     protected State state;
     protected int speed;
     protected List<Entity> stillObjects = new ArrayList<>();
@@ -60,7 +61,7 @@ public abstract class Mover extends AnimatedEntity {
 
     public boolean canMoveStillObject(List<Entity> entityList) {
         for (int i = 0; i < entityList.size(); i++) {
-            if (entityList.get(i) instanceof Wall && this.collision(entityList.get(i))) {
+            if ((entityList.get(i) instanceof Wall || entityList.get(i) instanceof Brick) && this.collision(entityList.get(i))) {
                 return (!this.collision(entityList.get(i)));
             }
         }

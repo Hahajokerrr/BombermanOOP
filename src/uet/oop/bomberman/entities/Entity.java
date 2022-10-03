@@ -116,6 +116,11 @@ public abstract class Entity {
         return true;
     }
 
+    public void Erase() {
+        setX(-50);
+        setY(-50);
+    }
+
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }

@@ -18,7 +18,7 @@ public abstract class Enemy extends Mover {
         super(x,y,img);
         setState(State.LEFT);
         setAlive(true);
-        setSpeed(1);
+        setSpeed(STANDARD_SPEED);
         AfterKill = 0;
     }
 
@@ -47,8 +47,6 @@ public abstract class Enemy extends Mover {
         double randomDouble = Math.random();
         randomDouble = randomDouble * 100 + 1;
         int randomInt = (int) randomDouble;
-        System.out.println(randomInt);
-        System.out.println(state);
         switch (state) {
             case UP:
                 setY(getY() + 1);

@@ -11,11 +11,19 @@ import java.util.Scanner;
 public class BombManager {
     private List<Bomb> BombList = new ArrayList<>();
     private List<Bomb> PlacedBomb = new ArrayList<>();
-    private int MaxBombNum = 3;
+    private int MaxBombNum = 1;
     private int BombNum = 0;
     private boolean isPlacing = false;
 
     public BombManager() {
+    }
+
+    public int getMaxBombNum() {
+        return MaxBombNum;
+    }
+
+    public void setMaxBombNum(int maxBombNum) {
+        MaxBombNum = maxBombNum;
     }
 
     /**
@@ -23,6 +31,12 @@ public class BombManager {
      */
     public void addBomb(Bomb bomb) {
         BombList.add(bomb);
+    }
+
+    public void setRadius(int radius) {
+        for(int i=0; i<BombList.size(); i++) {
+            BombList.get(i).setDetonateRadius(radius);
+        }
     }
 
     /**

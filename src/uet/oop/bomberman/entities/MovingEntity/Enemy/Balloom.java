@@ -5,6 +5,7 @@ import uet.oop.bomberman.entities.Bomb.Bomb;
 import uet.oop.bomberman.entities.Bomb.FlameSegment;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.MovingEntity.State;
+import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -18,7 +19,7 @@ public class Balloom extends Enemy {
 
     public void ContactStillObject() {
         for (int i = 0; i < stillObjects.size(); i++) {
-            if (stillObjects.get(i) instanceof Wall && this.collision(stillObjects.get(i))) {
+            if ((stillObjects.get(i) instanceof Wall || stillObjects.get(i) instanceof Brick) && this.collision(stillObjects.get(i))) {
                 RandomDirection();
             }
         }
@@ -65,8 +66,7 @@ public class Balloom extends Enemy {
             setImg(Sprite.balloom_dead.getFxImage());
             AfterKill++;
             if(AfterKill >= 150) {
-                setX(-50);
-                setY(-50);
+                Erase();
             }
         }
     }
