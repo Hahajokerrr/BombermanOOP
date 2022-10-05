@@ -33,6 +33,8 @@ public class Bomber extends Mover {
         canMove = true;
     }
 
+
+
     public BombManager getBombManager() {
         return bombManager;
     }

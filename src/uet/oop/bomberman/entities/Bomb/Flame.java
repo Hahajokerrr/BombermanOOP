@@ -1,20 +1,29 @@
 package uet.oop.bomberman.entities.Bomb;
 
 import uet.oop.bomberman.entities.AnimatedEntity;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.Tile.Brick;
+import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+
+import java.util.List;
 
 public class Flame extends AnimatedEntity {
     private int direction;
     private int radius;
+
+    private int BrickRadius = radius;
+
     private FlameSegment[] flameSegments = new FlameSegment[3];
+
 
     public Flame(int x, int y, int direction, int radius) {
         this.direction = direction;
         this.x = x;
         this.y = y;
         this.radius = radius;
-        for(int i=0; i<3; i++) {
-            flameSegments[i] = new FlameSegment(-50,-50,false);
+        for (int i = 0; i < 3; i++) {
+            flameSegments[i] = new FlameSegment(-50, -50, false);
         }
     }
 
@@ -26,7 +35,32 @@ public class Flame extends AnimatedEntity {
         this.radius = radius;
     }
 
-    public void createFlame(int _x, int _y) {
+    public int getBrickRadius() {
+        return BrickRadius;
+    }
+
+    public void setBrickRadius(int brickRadius) {
+        BrickRadius = brickRadius;
+    }
+
+    public int CalculateRealRadius(List<Entity> stillObjects) {
+        int res = radius;
+            for (int j = 0; j < stillObjects.size(); j++) {
+                for (int i = 0; i < radius; i++) {
+                    if (flameSegments[i].collision(stillObjects.get(j))) {
+                        if (stillObjects.get(j) instanceof Wall) {
+                            res = i;
+                        }
+                        if (stillObjects.get(j) instanceof Brick) {
+                            BrickRadius = i;
+                        }
+                    }
+                }
+            }
+        return res;
+    }
+
+    public void createFlame(int _x, int _y, List<Entity> stillObjects) {
         int flameX = _x;
         int flameY = _y;
         boolean last = false;
@@ -55,12 +89,21 @@ public class Flame extends AnimatedEntity {
             flameSegments[i].setY(flameY);
             flameSegments[i].setLast(last);
         }
+        for (int i = CalculateRealRadius(stillObjects); i < radius; i++) {
+            flameSegments[i].Erase();
+            System.out.println(CalculateRealRadius(stillObjects));
+        }
+        if(BrickRadius < radius) {
+            for (int i = BrickRadius + 1; i < radius; i++) {
+                flameSegments[i].Erase();
+                System.out.println(BrickRadius);
+            }
+        }
     }
 
 
-
     public void creatFlame0() {
-        for(int i=0; i<radius; i++) {
+        for (int i = 0; i < radius; i++) {
             switch (direction) {
                 case 0:
                     if (flameSegments[i].isLast()) {
@@ -95,7 +138,7 @@ public class Flame extends AnimatedEntity {
     }
 
     public void creatFlame1() {
-        for(int i=0; i<radius; i++) {
+        for (int i = 0; i < radius; i++) {
             switch (direction) {
                 case 0:
                     if (flameSegments[i].isLast()) {
@@ -130,7 +173,7 @@ public class Flame extends AnimatedEntity {
     }
 
     public void creatFlame2() {
-        for(int i=0; i<radius; i++) {
+        for (int i = 0; i < radius; i++) {
             switch (direction) {
                 case 0:
                     if (flameSegments[i].isLast()) {
@@ -169,10 +212,14 @@ public class Flame extends AnimatedEntity {
     }
 
     public void EraseFlame() {
-        for(int i=0; i<radius; i++) {
+        for (int i = 0; i < radius; i++) {
             flameSegments[i].setX(-50);
             flameSegments[i].setY(-50);
         }
+    }
+
+    public void PostDetonate() {
+        setBrickRadius(radius);
     }
 
     public void update() {

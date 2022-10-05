@@ -51,6 +51,14 @@ public abstract class Mover extends AnimatedEntity {
         this.entities = entities;
     }
 
+    public List<Entity> getStillObjects() {
+        return stillObjects;
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
     public boolean isAlive() {
         return alive;
     }

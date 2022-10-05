@@ -9,6 +9,7 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.Bomb.FlameSegment;
 
 import java.io.OutputStream;
+import java.util.List;
 
 public class Bomb extends AnimatedEntity {
     private Bomber bomber;
@@ -64,11 +65,13 @@ public class Bomb extends AnimatedEntity {
 
     public boolean DetonateBomb() {
         if (System.currentTimeMillis() - placedTime >= DETONATE_TIME) {
-            x = -50;
-            y = -50;
+            this.Erase();
             isPlaced = false;
             placedTime = Long.MAX_VALUE;
             setMoveOut(-1);
+            for(int i=0; i<4; i++) {
+                flames[i].PostDetonate();
+            }
             return true;
         }
         return false;
@@ -86,7 +89,7 @@ public class Bomb extends AnimatedEntity {
         if (isPlaced) {
             if (System.currentTimeMillis() - placedTime >= 1700) {
                 for (int i = 0; i < 4; i++) {
-                    flames[i].createFlame(this.x, this.y);
+                    flames[i].createFlame(this.x, this.y, bomber.getStillObjects());
                 }
                 if (getCurrentTime() < 1800) {
                     setImg(Sprite.bomb_exploded.getFxImage());
