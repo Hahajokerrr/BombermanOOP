@@ -91,12 +91,10 @@ public class Flame extends AnimatedEntity {
         }
         for (int i = CalculateRealRadius(stillObjects); i < radius; i++) {
             flameSegments[i].Erase();
-            System.out.println(CalculateRealRadius(stillObjects));
         }
         if(BrickRadius < radius) {
             for (int i = BrickRadius + 1; i < radius; i++) {
                 flameSegments[i].Erase();
-                System.out.println(BrickRadius);
             }
         }
     }

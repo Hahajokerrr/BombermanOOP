@@ -15,6 +15,8 @@ import uet.oop.bomberman.entities.Bomb.BombManager;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.Enemy.Balloom;
+import uet.oop.bomberman.entities.MovingEntity.Enemy.Doll;
+import uet.oop.bomberman.entities.MovingEntity.Enemy.Minvo;
 import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Item.BombItem;
@@ -44,6 +46,12 @@ public class BombermanGame extends Application {
     Bomb bomb3 = new Bomb(bomberman);
 
     Balloom balloom = new Balloom(6, 1, Sprite.balloom_left1.getFxImage());
+    Doll doll = new Doll(6,2, Sprite.doll_left1.getFxImage());
+    Minvo minvo = new Minvo(6,3, Sprite.minvo_left1.getFxImage());
+
+    Balloom balloom1 = new Balloom(-10, -10, Sprite.balloom_left1.getFxImage());
+
+    Doll doll1 = new Doll(-10,-10, Sprite.doll_left1.getFxImage());
 
     SpeedItem speedItem = new SpeedItem(8,8,Sprite.powerup_speed.getFxImage());
     BombItem bombItem = new BombItem(9,9,Sprite.powerup_bombs.getFxImage());
@@ -71,6 +79,12 @@ public class BombermanGame extends Application {
         entities.add(bomb2);
         entities.add(bomb3);
         entities.add(balloom);
+        entities.add(doll);
+        entities.add(minvo);
+        entities.add(balloom1);
+        entities.add(doll1);
+        minvo.setBalloom(balloom1);
+        minvo.setDoll(doll1);
         entities.add(speedItem);
         entities.add(bombItem);
         entities.add(flameItem);
@@ -102,6 +116,17 @@ public class BombermanGame extends Application {
 
         balloom.setStillObjects(stillObjects);
         balloom.setEntities(entities);
+
+        doll.setStillObjects(stillObjects);
+        doll.setEntities(entities);
+
+        minvo.setStillObjects(stillObjects);
+        minvo.setEntities(entities);
+
+        balloom1.setStillObjects(stillObjects);
+        balloom1.setEntities(entities);
+        doll1.setEntities(entities);
+        doll1.setStillObjects(stillObjects);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override

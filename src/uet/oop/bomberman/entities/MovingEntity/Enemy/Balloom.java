@@ -17,28 +17,6 @@ public class Balloom extends Enemy {
         setState(State.LEFT);
     }
 
-    public void ContactStillObject() {
-        for (int i = 0; i < stillObjects.size(); i++) {
-            if ((stillObjects.get(i) instanceof Wall || stillObjects.get(i) instanceof Brick) && this.collision(stillObjects.get(i))) {
-                RandomDirection();
-            }
-        }
-    }
-
-    public void ContactEntities() {
-        for(int i=0; i<entities.size(); i++) {
-            if (entities.get(i) instanceof Bomber && this.collision(entities.get(i))) {
-                ((Bomber) entities.get(i)).setAlive(false);
-            }
-            if (entities.get(i) instanceof Bomb && this.collision(entities.get(i))) {
-                RandomDirection();
-            }
-            if (entities.get(i) instanceof FlameSegment && this.collision(entities.get(i))) {
-                Kill();
-            }
-        }
-    }
-
     public void update() {
         if (alive) {
             ContactStillObject();
@@ -64,10 +42,7 @@ public class Balloom extends Enemy {
             }
         } else {
             setImg(Sprite.balloom_dead.getFxImage());
-            AfterKill++;
-            if(AfterKill >= 150) {
-                Erase();
-            }
+            AfterKill();
         }
     }
 }
