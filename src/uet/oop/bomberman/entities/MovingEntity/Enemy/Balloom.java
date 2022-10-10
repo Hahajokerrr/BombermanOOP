@@ -12,9 +12,10 @@ import uet.oop.bomberman.graphics.Sprite;
 import javax.xml.parsers.SAXParser;
 
 public class Balloom extends Enemy {
-    public Balloom(int x, int y, Image img) {
-        super(x, y, img);
+    public Balloom(int x, int y, Image img, Bomber bomber) {
+        super(x, y, img, bomber);
         setState(State.LEFT);
+        Score = 100;
     }
 
     public void update() {

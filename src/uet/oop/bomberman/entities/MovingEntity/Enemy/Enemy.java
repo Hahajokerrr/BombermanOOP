@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.MovingEntity.Enemy;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Stop;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Bomb.Bomb;
 import uet.oop.bomberman.entities.Bomb.FlameSegment;
 import uet.oop.bomberman.entities.Entity;
@@ -19,13 +20,64 @@ public abstract class Enemy extends Mover {
 
     protected List<Entity> stillObjects;
     protected List<Entity> entities;
+    protected Bomber bomber;
     protected int AfterKill;
-    public Enemy(int x, int y, Image img) {
-        super(x,y,img);
+    protected int Score;
+
+    public Enemy(int x, int y, Image img, Bomber bomber) {
+        super(x, y, img);
         setState(State.LEFT);
         setAlive(true);
         setSpeed(STANDARD_SPEED);
         AfterKill = 0;
+        this.bomber = bomber;
+    }
+
+    public int getScore() {
+        return Score;
+    }
+
+    public void setScore(int score) {
+        Score = score;
+    }
+
+    @Override
+    public boolean collision(Entity other) {
+        // TODO: Kiem tra va cham cua 2 thuc the.
+        int leftA, leftB;
+        int rightA, rightB;
+        int topA, topB;
+        int bottomA, bottomB;
+
+        //Calculate the sides of rect of this
+        leftA = x;
+        rightA = x + 30;
+        topA = y;
+        bottomA = y + 30;
+
+        //Calculate the sides of rect of other
+        leftB = other.getX();
+        rightB = other.getX() + Sprite.SCALED_SIZE;
+        topB = other.getY();
+        bottomB = other.getY() + Sprite.SCALED_SIZE;
+
+        if (bottomA <= topB) {
+            return false;
+        }
+
+        if (topA >= bottomB) {
+            return false;
+        }
+
+        if (rightA <= leftB) {
+            return false;
+        }
+
+        if (leftA >= rightB) {
+            return false;
+        }
+        //If none of the sides from A are outside B
+        return true;
     }
 
     public List<Entity> getStillObjects() {
@@ -48,16 +100,18 @@ public abstract class Enemy extends Mover {
 
     public void Kill() {
         setAlive(false);
+        bomber.setScore(bomber.getScore() + this.Score);
     }
 
     public void AfterKill() {
+        if(AfterKill == 0) bomber.enemyNum[bomber.level-1]--;
         AfterKill++;
-        if(AfterKill >= 50) setImg(Sprite.mob_dead1.getFxImage());
-        if(AfterKill >= 100) setImg(Sprite.mob_dead2.getFxImage());
-        if(AfterKill >= 150) setImg(Sprite.mob_dead3.getFxImage());
-        if(AfterKill >= 200) {
+        if (AfterKill >= 50) setImg(Sprite.mob_dead1.getFxImage());
+        if (AfterKill >= 100) setImg(Sprite.mob_dead2.getFxImage());
+        if (AfterKill >= 150) setImg(Sprite.mob_dead3.getFxImage());
+        if (AfterKill == 200) {
             Erase();
-            AfterKill = 0;
+            AfterKill = 201;
         }
     }
 
@@ -70,7 +124,7 @@ public abstract class Enemy extends Mover {
     }
 
     public void ContactEntities() {
-        for(int i=0; i<entities.size(); i++) {
+        for (int i = 0; i < entities.size(); i++) {
             if (entities.get(i) instanceof Bomber && this.collision(entities.get(i))) {
                 ((Bomber) entities.get(i)).setAlive(false);
             }
@@ -113,11 +167,13 @@ public abstract class Enemy extends Mover {
                 else setState(State.UP);
                 break;
         }
-        if(y<32) y = 33;
-        if(x<32) x = 33;
-        if(y > 32*14) y = 32*14 - 1;
-        if(x > 32*19) x = 32*19 - 1;
+        if (y < Sprite.SCALED_SIZE) y = 33;
+        if (x < Sprite.SCALED_SIZE) x = 33;
+        if (y > Sprite.SCALED_SIZE * (BombermanGame.HEIGHT - 1))
+            y = Sprite.SCALED_SIZE * (BombermanGame.HEIGHT - 1) - 1;
+        if (x > Sprite.SCALED_SIZE * (BombermanGame.WIDTH - 1)) x = Sprite.SCALED_SIZE * (BombermanGame.WIDTH - 1) - 1;
     }
+
     @Override
     public void update() {
 

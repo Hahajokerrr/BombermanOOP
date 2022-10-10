@@ -1,6 +1,9 @@
 package uet.oop.bomberman.entities.MovingEntity;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import uet.oop.bomberman.entities.Bomb.Bomb;
 import uet.oop.bomberman.entities.Bomb.BombManager;
 import uet.oop.bomberman.entities.Bomb.FlameSegment;
@@ -9,6 +12,7 @@ import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Item.BombItem;
 import uet.oop.bomberman.entities.Tile.Item.FlameItem;
 import uet.oop.bomberman.entities.Tile.Item.SpeedItem;
+import uet.oop.bomberman.entities.Tile.Portal;
 import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -18,13 +22,18 @@ import java.util.List;
 
 public class Bomber extends Mover {
 
-    public static final int POWER_UP_SPEED= 2;
+    public static final int POWER_UP_SPEED = 2;
     private boolean canMove;
+    private int Score = 0;
     private boolean SpeedItem = false;
     private int BombItem = 1;
     private int FlameItem = 1;
-    public static final int WIDTH = 24;
-    public static final int HEIGHT = 28;
+    public int[] enemyNum = {1, 1, 1};
+    public int level = 1;
+    public boolean canLevelUp = false;
+    public boolean LevelUp = false;
+    public static final int WIDTH = 20;
+    public static final int HEIGHT = 24;
     private BombManager bombManager = new BombManager();
 
     public Bomber(int x, int y, Image img) {
@@ -33,11 +42,10 @@ public class Bomber extends Mover {
         canMove = true;
     }
 
-
-
     public BombManager getBombManager() {
         return bombManager;
     }
+
     public boolean isCanMove() {
         return canMove;
     }
@@ -68,6 +76,14 @@ public class Bomber extends Mover {
 
     public void setFlameItem(int flameItem) {
         FlameItem = flameItem;
+    }
+
+    public int getScore() {
+        return Score;
+    }
+
+    public void setScore(int score) {
+        Score = score;
     }
 
     @Override
@@ -111,7 +127,7 @@ public class Bomber extends Mover {
 
     public void Contact() {
         for (int i = 0; i < entities.size(); i++) {
-            if(collision(entities.get(i))) {
+            if (collision(entities.get(i))) {
                 if (entities.get(i) instanceof FlameSegment) {
                     setAlive(false);
                 }
@@ -126,11 +142,15 @@ public class Bomber extends Mover {
                     ((FlameItem) entities.get(i)).Contact();
                     FlameItem++;
                 }
+                if (entities.get(i) instanceof Portal && canLevelUp == true) {
+                    LevelUp = true;
+                }
             }
         }
+
         for (int i = 0; i < entities.size(); i++) {
-            for(int j=0; j< stillObjects.size(); j++) {
-                if(stillObjects.get(j).collision(entities.get(i))) {
+            for (int j = 0; j < stillObjects.size(); j++) {
+                if (stillObjects.get(j).collision(entities.get(i))) {
                     if (stillObjects.get(j) instanceof Brick && entities.get(i) instanceof FlameSegment) {
                         ((Brick) stillObjects.get(j)).setBroken(true);
                     }
@@ -139,8 +159,9 @@ public class Bomber extends Mover {
         }
     }
 
+
     public void SetCheckedSpeed() {
-        if(SpeedItem) {
+        if (SpeedItem) {
             setSpeed(POWER_UP_SPEED);
         } else {
             setSpeed(STANDARD_SPEED);
@@ -165,7 +186,7 @@ public class Bomber extends Mover {
                     if (!canMoveStillObject(stillObjects)) {
                         setY(getY() + speed);
                     }
-                    if(!canMove) {
+                    if (!canMove) {
                         setY(getY() + speed + 1);
                     }
                     setImg(Sprite.player_up.getFxImage());
@@ -178,7 +199,7 @@ public class Bomber extends Mover {
                     if (!canMoveStillObject(stillObjects)) {
                         setY(getY() - speed);
                     }
-                    if(!canMove) {
+                    if (!canMove) {
                         setY(getY() - speed - 1);
                     }
                     setImg(Sprite.player_down.getFxImage());
@@ -191,7 +212,7 @@ public class Bomber extends Mover {
                     if (!canMoveStillObject(stillObjects)) {
                         setX(getX() + speed);
                     }
-                    if(!canMove) {
+                    if (!canMove) {
                         setX(getX() + speed + 1);
                     }
                     setImg(Sprite.player_left.getFxImage());
@@ -204,7 +225,7 @@ public class Bomber extends Mover {
                     if (!canMoveStillObject(stillObjects) || !canMove) {
                         setX(getX() - speed);
                     }
-                    if(!canMove) {
+                    if (!canMove) {
                         setX(getX() - 1);
                     }
                     setImg(Sprite.player_right.getFxImage());
@@ -219,4 +240,6 @@ public class Bomber extends Mover {
             setImg(Sprite.player_dead1.getFxImage());
         }
     }
+
+
 }

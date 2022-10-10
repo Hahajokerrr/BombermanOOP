@@ -1,24 +1,39 @@
 package uet.oop.bomberman;
 
+import java.io.File;
 import java.util.List;
-import uet.oop.bomberman.entities.Tile.LevelLoader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
 
-public class FileLeverLoader extends LevelLoader {
+public class FileLeverLoader {
 
-    private static  char[][] _map;
-    private static int _height;
-    private static int _width;
-    private static int _level;
+    public FileLeverLoader() {
 
-    @Override
-    public void loadLever (int level) {
+    }
+    private char[][] map;
+    private int height;
+    private int width;
+    private int level;
+
+
+    public char getMapAt(int i, int j) {
+        return map[i][j];
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void loadLevel (int level) {
         //đọc dữ liệu từ tệp cấu hình /levers/Level{}.txt
-        // cap nhat gia tri doc duoc vao _width, _height, _level, _map
+        // cap nhat gia tri doc duoc vao width, height, level, map
         List<String> list = new ArrayList<>();
         try {   // doc tep luu map
             FileReader fr = new FileReader("res\\levels\\Level" + level + ".txt");
@@ -33,13 +48,13 @@ public class FileLeverLoader extends LevelLoader {
             e.printStackTrace();
         }
         String[] arrays = list.get(0).trim().split(" ");
-        _level = Integer.parseInt(arrays[0]);
-        _height = Integer.parseInt(arrays[1]);
-        _width = Integer.parseInt(arrays[2]);
-        _map = new char[_height][_width];
-        for (int i = 0; i < _height; i++) {
-            for (int j = 0; j < _width; j++) {
-                _map[i][j] = list.get(i + 1).charAt(j);
+        level = Integer.parseInt(arrays[0]);
+        height = Integer.parseInt(arrays[1]);
+        width = Integer.parseInt(arrays[2]);
+        map = new char[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                map[i][j] = list.get(i + 1).charAt(j);
             }
         }
         //gan cac phan tu cho mang

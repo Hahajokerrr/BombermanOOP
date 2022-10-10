@@ -1,14 +1,16 @@
 package uet.oop.bomberman.entities.MovingEntity.Enemy;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.MovingEntity.State;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Doll extends Enemy{
     long changeSpeed = -1;
 
-    public Doll(int x, int y, Image img) {
-        super(x, y, img);
+    public Doll(int x, int y, Image img, Bomber bomber) {
+        super(x, y, img, bomber);
+        Score = 200;
         setState(State.LEFT);
     }
 
