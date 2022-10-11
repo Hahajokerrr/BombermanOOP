@@ -54,6 +54,7 @@ public class Minvo extends Enemy {
             ContactStillObject();
             ContactEntities();
             animate();
+            speed = animate % 2;
             switch (state) {
                 case UP:
                     setY(getY() - speed);

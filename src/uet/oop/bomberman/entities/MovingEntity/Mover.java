@@ -70,7 +70,7 @@ public abstract class Mover extends AnimatedEntity {
     public boolean canMoveStillObject(List<Entity> entityList) {
         for (int i = 0; i < entityList.size(); i++) {
             if ((entityList.get(i) instanceof Wall || entityList.get(i) instanceof Brick) && this.collision(entityList.get(i))) {
-                return (!this.collision(entityList.get(i)));
+                return false;
             }
         }
         return true;

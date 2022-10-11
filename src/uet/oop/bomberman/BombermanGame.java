@@ -25,10 +25,7 @@ import uet.oop.bomberman.entities.Bomb.Bomb;
 import uet.oop.bomberman.entities.Bomb.BombManager;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.MovingEntity.Enemy.Balloom;
-import uet.oop.bomberman.entities.MovingEntity.Enemy.Doll;
-import uet.oop.bomberman.entities.MovingEntity.Enemy.Enemy;
-import uet.oop.bomberman.entities.MovingEntity.Enemy.Minvo;
+import uet.oop.bomberman.entities.MovingEntity.Enemy.*;
 import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Item.BombItem;
@@ -280,6 +277,8 @@ public class BombermanGame extends Application {
                 Balloom balloom;
                 Doll doll;
                 Minvo minvo;
+                Oneal oneal;
+                Kondoria kondoria;
                 FlameItem flameItem;
                 BombItem bombItem;
                 SpeedItem speedItem;
@@ -327,6 +326,18 @@ public class BombermanGame extends Application {
                         balloom.setStillObjects(stillObjects);
                         minvo.setDoll(doll);
                         minvo.setBalloom(balloom);
+                        break;
+                    case '4':
+                        oneal = new Oneal(j, i, Sprite.oneal_left1.getFxImage(), bomberman);
+                        entities.add(oneal);
+                        oneal.setEntities(entities);
+                        oneal.setStillObjects(stillObjects);
+                        break;
+                    case '5':
+                        kondoria = new Kondoria(j, i, Sprite.kondoria_left1.getFxImage(), bomberman);
+                        entities.add(kondoria);
+                        kondoria.setEntities(entities);
+                        kondoria.setStillObjects(stillObjects);
                         break;
                     case 'f':
                         objectBrick = new Brick(j, i, Sprite.brick.getFxImage());
