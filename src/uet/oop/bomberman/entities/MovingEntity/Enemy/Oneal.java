@@ -115,17 +115,18 @@ public class Oneal extends Enemy {
 
     public void update() {
         if (alive) {
-            ContactEntities();
             animate();
             setImg(Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, animate, 50).getFxImage());
             if (Chasing()) {
                 speed = 1;
                 CalculateDirection();
                 move();
+                ContactEntities();
             } else {
                 speed = animate % 2;
                 Wandering();
                 move();
+                ContactEntities();
             }
         } else {
             setImg(Sprite.oneal_dead.getFxImage());

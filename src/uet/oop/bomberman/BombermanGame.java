@@ -57,6 +57,9 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private Scene GameScene;
     private Scene MenuScene;
+    private Scene pausedMenuScene;
+    private Scene Victory;
+    private Scene Defeated;
     private FileLeverLoader leverLoader = new FileLeverLoader();
     private int level = 1;
     private int map = 0;
@@ -66,9 +69,17 @@ public class BombermanGame extends Application {
     Bomb bomb2 = new Bomb(bomberman);
     Bomb bomb3 = new Bomb(bomberman);
 
+    VBox root = new VBox();
+    VBox menu = new VBox();
+    VBox pausedMenu = new VBox();
+    VBox Win = new VBox();
+    private int win = 0;
+    VBox Lose = new VBox();
+    private int lose = 0;
+
+
 
     private List<Entity> entities = new ArrayList<>();
-    //private BombManager bombManager = new BombManager();
     private List<Entity> stillObjects = new ArrayList<>();
 
     Text Stat = new Text("Level " + level + "            Score: " + bomberman.getScore());
@@ -80,59 +91,11 @@ public class BombermanGame extends Application {
 
     @Override
     public void start(Stage stage) {
-        /*
-        // Tao Canvas
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-        gc = canvas.getGraphicsContext2D();
-        Text Stat = new Text("Level " + level + "            Score: " + bomberman.getScore());
 
-        // Tao root container
-        VBox root = new VBox();
-        VBox menu = new VBox();
-        root.getChildren().add(Stat);
-        root.getChildren().add(canvas);
-
-        root.setStyle("-fx-background-color: white; -fx-text-fill: yellow;"); */
-
-        SceneHandler(stage);
-        bomberman.getBombManager().addBomb(bomb1);
-        bomberman.getBombManager().addBomb(bomb2);
-        bomberman.getBombManager().addBomb(bomb3);
-
-        /*
-        // Tao scene
-        GameScene = new Scene(root, WIDTH * 32, HEIGHT * 32 + 15);
-        MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32, Color.BLACK);
-        stage.setScene(MenuScene);
-
-        Button start = new Button("START");
-        Button instructions = new Button("INSTRUCTIONS");
-        Text title = new Text("BOMBERMAN");
-        title.setStyle("-fx-font: 80px Tahoma; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%); -fx-stroke: black; -fx-stroke-width: 1");
-        start.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-base: #b6e7c9;");
-        start.setPadding(new Insets(20, 109, 20, 109));
-        instructions.setPadding(new Insets(20, 40, 20, 40));
-        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
-        start.setFont(font);
-        instructions.setFont(font);
-
-        menu.setAlignment(Pos.CENTER);
-        menu.setSpacing(20);
-        menu.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        menu.getChildren().addAll(title, start, instructions);
-
-
-        start.setOnAction(event -> {
-            paused = false;
-            stage.setScene(GameScene);
-        });
-
-        stage.setTitle("Bomberman");
-        stage.show();
-
-         */
-
+        StartSceneHandler(stage);
+        PausedScenehandler(stage);
+        winHandler(stage);
+        loseHandler(stage);
 
         //createMap();
         AnimationTimer timer = new AnimationTimer() {
@@ -140,38 +103,43 @@ public class BombermanGame extends Application {
             public void handle(long l) {
                 if ((map < level && bomberman.LevelUp == true) || map == 0) {
                     createMap();
-                    bomberman.setStillObjects(stillObjects);
-                    bomberman.setEntities(entities);
-                    entities.add(bomb1);
-                    entities.add(bomb2);
-                    entities.add(bomb3);
-                    entities.add(bomberman);
-
-                    for (int i = 0; i < 4; i++) {
-                        for (int j = 0; j < 3; j++) {
-                            entities.add(bomb1.getFlameAt(i).getFlameSegmentAt(j));
-                            entities.add(bomb2.getFlameAt(i).getFlameSegmentAt(j));
-                            entities.add(bomb3.getFlameAt(i).getFlameSegmentAt(j));
-                        }
-                    }
+                    initializeBomber();
                 }
-                HandleInput();
+                HandleInput(stage);
                 render();
-                if (paused == false) update();
+                if (paused == false) {
+                    update(stage);
+                }
                 Stat.setText("Level " + level + "            Score: " + bomberman.getScore());
             }
         };
         timer.start();
     }
 
-    public void SceneHandler(Stage stage) {
+    public void initializeBomber(){
+        bomberman.setStillObjects(stillObjects);
+        bomberman.setEntities(entities);
+        entities.add(bomb1);
+        entities.add(bomb2);
+        entities.add(bomb3);
+        entities.add(bomberman);
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                entities.add(bomb1.getFlameAt(i).getFlameSegmentAt(j));
+                entities.add(bomb2.getFlameAt(i).getFlameSegmentAt(j));
+                entities.add(bomb3.getFlameAt(i).getFlameSegmentAt(j));
+            }
+        }
+        bomberman.getBombManager().addBomb(bomb1);
+        bomberman.getBombManager().addBomb(bomb2);
+        bomberman.getBombManager().addBomb(bomb3);
+    }
+
+    public void StartSceneHandler(Stage stage) {
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
-        //Text Stat = new Text("Level " + level + "            Score: " + bomberman.getScore());
 
-        // Tao root container
-        VBox root = new VBox();
-        VBox menu = new VBox();
         root.getChildren().add(Stat);
         root.getChildren().add(canvas);
 
@@ -179,36 +147,142 @@ public class BombermanGame extends Application {
 
         // Tao scene
         GameScene = new Scene(root, WIDTH * 32, HEIGHT * 32 + 15);
-        MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32, Color.BLACK);
+        MenuScene = new Scene(menu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
         stage.setScene(MenuScene);
 
         Button start = new Button("START");
-        Button instructions = new Button("INSTRUCTIONS");
+        Button exit = new Button("EXIT");
+
         Text title = new Text("BOMBERMAN");
         title.setStyle("-fx-font: 80px Tahoma; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%); -fx-stroke: black; -fx-stroke-width: 1");
         start.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-base: #b6e7c9;");
         start.setPadding(new Insets(20, 109, 20, 109));
-        instructions.setPadding(new Insets(20, 40, 20, 40));
+        exit.setPadding(new Insets(20, 122, 20, 122));
         Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
         start.setFont(font);
-        instructions.setFont(font);
+        exit.setFont(font);
+        title.setFont(font);
 
         menu.setAlignment(Pos.CENTER);
         menu.setSpacing(20);
         menu.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        menu.getChildren().addAll(title, start, instructions);
+        menu.getChildren().addAll(title, start, exit);
         start.setOnAction(event -> {
             paused = false;
             stage.setScene(GameScene);
+        });
+
+        exit.setOnAction(event -> {
+            stage.close();
         });
 
         stage.setTitle("Bomberman");
         stage.show();
     }
 
+    public void PausedScenehandler(Stage stage) {
+        Button exit = new Button("EXIT");
+        Button resume = new Button("RESUME");
+        pausedMenuScene = new Scene(pausedMenu, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
 
-    public void HandleInput() {
+        pausedMenu.getChildren().addAll(resume, exit);
+
+        pausedMenu.setAlignment(Pos.CENTER);
+        pausedMenu.setSpacing(20);
+        pausedMenu.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        exit.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-base: #b6e7c9;");
+        resume.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-base: #b6e7c9;");
+        exit.setPadding(new Insets(20, 109, 20, 109));
+        resume.setPadding(new Insets(20, 80, 20, 80));
+        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
+        resume.setFont(font);
+        exit.setFont(font);
+
+
+        resume.setOnAction(event -> {
+            paused = false;
+            GameSceneTrans(stage);
+        });
+
+        exit.setOnAction(event -> {
+            stage.close();
+        });
+    }
+
+    public void winHandler(Stage stage) {
+        Text title = new Text("VICTORY");
+        title.setStyle("-fx-font: 80px Tahoma; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%); -fx-stroke: black; -fx-stroke-width: 1");
+
+        Button exit = new Button("EXIT");
+
+        Victory = new Scene(Win, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
+
+        Win.getChildren().addAll(title, exit);
+
+        exit.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-base: #b6e7c9;");
+        exit.setPadding(new Insets(20, 109, 20, 109));
+        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
+        exit.setFont(font);
+
+        Win.setAlignment(Pos.CENTER);
+        Win.setSpacing(20);
+        Win.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        exit.setOnAction(event -> {
+            stage.close();
+        });
+    }
+
+    public void loseHandler(Stage stage) {
+        Text title = new Text("DEFEATED");
+        title.setStyle("-fx-font: 80px Tahoma; -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%); -fx-stroke: black; -fx-stroke-width: 1");
+
+        Button exit = new Button("EXIT");
+
+        Defeated = new Scene(Lose, WIDTH * 32, HEIGHT * 32 + 15, Color.BLACK);
+
+        Lose.getChildren().addAll(title, exit);
+
+        exit.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-base: #b6e7c9;");
+        exit.setPadding(new Insets(20, 109, 20, 109));
+        Font font = Font.font("Tahoma", FontWeight.BOLD, 30);
+        exit.setFont(font);
+
+        Lose.setAlignment(Pos.CENTER);
+        Lose.setSpacing(20);
+        Lose.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        exit.setOnAction(event -> {
+            stage.close();
+        });
+    }
+
+    public void PausedSceneTrans(Stage stage) {
+        stage.setScene(pausedMenuScene);
+    }
+
+    public void GameSceneTrans(Stage stage) {
+        stage.setScene(GameScene);
+    }
+
+    public void winTrans(Stage stage) {
+        win++;
+        if(win >= 200) {
+            stage.setScene(Victory);
+        }
+    }
+
+    public void loseTrans(Stage stage) {
+        lose++;
+        if(lose >= 200) {
+            stage.setScene(Defeated);
+        }
+    }
+
+
+    public void HandleInput(Stage stage) {
         EventHandler<KeyEvent> eventHandler1 = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
@@ -236,6 +310,11 @@ public class BombermanGame extends Application {
                     case SPACE:
                         bomberman.getBombManager().PlaceBomb(bomberman);
                         break;
+                    case ESCAPE:
+                        if(!paused) {
+                            paused = true;
+                            PausedSceneTrans(stage);
+                        }
                     default:
                         break;
                 }
@@ -371,20 +450,27 @@ public class BombermanGame extends Application {
         }
     }
 
-    public void update() {
-        entities.forEach(Entity::update);
-        stillObjects.forEach(Entity::update);
-        bomberman.getBombManager().DetonateBomb();
+    public void levelhandler(Stage stage) {
+        if(bomberman.isAlive() == false) {
+            loseTrans(stage);
+        }
         if (bomberman.enemyNum[map - 1] <= 0) {
             if (map == 1) {
                 bomberman.canLevelUp = true;
                 level = map + 1;
-                System.out.println(bomberman.canLevelUp);
-                System.out.println(level);
-                System.out.println(map);
+            } else if(map == 2) {
+                winTrans(stage);
             }
         } else bomberman.canLevelUp = false;
         bomberman.level = level;
+        System.out.println(level + " " + map + " " + bomberman.enemyNum[map - 1]);
+    }
+
+    public void update(Stage stage) {
+        entities.forEach(Entity::update);
+        stillObjects.forEach(Entity::update);
+        bomberman.getBombManager().DetonateBomb();
+        levelhandler(stage);
     }
 
     public void render() {
