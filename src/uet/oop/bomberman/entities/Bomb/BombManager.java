@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.Bomb;
 
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BombManager {
+    private Sound BombSet = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\Bomb_set.wav");
     private List<Bomb> BombList = new ArrayList<>();
     private List<Bomb> PlacedBomb = new ArrayList<>();
     private int MaxBombNum = 1;

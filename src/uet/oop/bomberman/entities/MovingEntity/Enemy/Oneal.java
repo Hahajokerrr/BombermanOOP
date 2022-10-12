@@ -69,8 +69,7 @@ public class Oneal extends Enemy {
                 ((Bomber) entities.get(i)).setAlive(false);
             }
             if (entities.get(i) instanceof Bomb && this.collision(entities.get(i))) {
-                horizontal = - horizontal;
-                vertical = - vertical;
+                speed = 0;
             }
             if (entities.get(i) instanceof FlameSegment && this.collision(entities.get(i))) {
                 Kill();

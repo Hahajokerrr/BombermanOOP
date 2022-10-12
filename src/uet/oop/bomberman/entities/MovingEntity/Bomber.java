@@ -28,7 +28,7 @@ public class Bomber extends Mover {
     private boolean SpeedItem = false;
     private int BombItem = 1;
     private int FlameItem = 1;
-    public int[] enemyNum = {1, 1};
+    public int[] enemyNum = {7, 1};
     public int level = 1;
     public boolean canLevelUp = false;
     public boolean LevelUp = false;

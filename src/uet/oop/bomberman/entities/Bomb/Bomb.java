@@ -7,11 +7,14 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.MovingEntity.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.Bomb.FlameSegment;
+import uet.oop.bomberman.sound.Sound;
 
 import java.io.OutputStream;
 import java.util.List;
 
 public class Bomb extends AnimatedEntity {
+    private Sound BombExplodes = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\Bomb_explodes.wav");
+
     private Bomber bomber;
     private boolean isPlaced = false;
     private long placedTime;
@@ -88,11 +91,13 @@ public class Bomb extends AnimatedEntity {
     public void update() {
         if (isPlaced) {
             if (System.currentTimeMillis() - placedTime >= 1700) {
+                BombExplodes.play();
                 for (int i = 0; i < 4; i++) {
                     flames[i].createFlame(this.x, this.y, bomber.getStillObjects());
                 }
                 if (getCurrentTime() < 1800) {
                     setImg(Sprite.bomb_exploded.getFxImage());
+                    BombExplodes.stop();
                     for (int i = 0; i < 4; i++) {
                         flames[i].creatFlame0();
                     }

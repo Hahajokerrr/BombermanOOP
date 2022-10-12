@@ -152,4 +152,3 @@ public class Kondoria extends Enemy {
         }
     }
 }
-

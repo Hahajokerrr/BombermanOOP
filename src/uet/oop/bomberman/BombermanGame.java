@@ -55,6 +55,9 @@ public class BombermanGame extends Application {
     int i = 0;
 
     Sound soundtrack = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\soundtrack.wav");
+    Sound victory = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\Level_up.wav");
+    Sound click = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\Bomb_set.wav");
+    Sound defeated = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\endgame3.wav");
 
     private GraphicsContext gc;
     private Canvas canvas;
@@ -67,7 +70,7 @@ public class BombermanGame extends Application {
     private int level = 1;
     private int map = 0;
     private boolean paused = true;
-    Bomber bomberman = new Bomber(3, 3, Sprite.player_right.getFxImage());
+    private Bomber bomberman = new Bomber(3, 3, Sprite.player_right.getFxImage());
     Bomb bomb1 = new Bomb(bomberman);
     Bomb bomb2 = new Bomb(bomberman);
     Bomb bomb3 = new Bomb(bomberman);
@@ -175,10 +178,12 @@ public class BombermanGame extends Application {
         menu.getChildren().addAll(title, start, exit);
         start.setOnAction(event -> {
             paused = false;
+            click.play();
             stage.setScene(GameScene);
         });
 
         exit.setOnAction(event -> {
+            click.play();
             stage.close();
         });
 
@@ -207,11 +212,13 @@ public class BombermanGame extends Application {
 
 
         resume.setOnAction(event -> {
+            click.play();
             paused = false;
             GameSceneTrans(stage);
         });
 
         exit.setOnAction(event -> {
+            click.play();
             stage.close();
         });
     }
@@ -236,6 +243,7 @@ public class BombermanGame extends Application {
         Win.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         exit.setOnAction(event -> {
+            click.play();
             stage.close();
         });
     }
@@ -260,6 +268,7 @@ public class BombermanGame extends Application {
         Lose.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         exit.setOnAction(event -> {
+            click.play();
             stage.close();
         });
     }
@@ -276,6 +285,8 @@ public class BombermanGame extends Application {
         win++;
         if(win >= 200) {
             stage.setScene(Victory);
+            soundtrack.stop();
+            victory.play();
         }
     }
 
@@ -283,6 +294,8 @@ public class BombermanGame extends Application {
         lose++;
         if(lose >= 200) {
             stage.setScene(Defeated);
+            soundtrack.stop();
+            defeated.play();
         }
     }
 
@@ -468,7 +481,6 @@ public class BombermanGame extends Application {
             }
         } else bomberman.canLevelUp = false;
         bomberman.level = level;
-        System.out.println(level + " " + map + " " + bomberman.enemyNum[map - 1]);
     }
 
     public void update(Stage stage) {
