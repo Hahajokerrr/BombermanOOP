@@ -238,6 +238,7 @@ public class Bomber extends Mover {
             }
         } else {
             setImg(Sprite.player_dead1.getFxImage());
+            dieSound.play();
         }
     }
 

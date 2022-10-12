@@ -37,6 +37,7 @@ import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.entities.MovingEntity.Mover;
 import uet.oop.bomberman.entities.MovingEntity.State;
+import uet.oop.bomberman.sound.Sound;
 
 
 import java.awt.*;
@@ -52,6 +53,8 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 31;
     public static final int HEIGHT = 15;
     int i = 0;
+
+    Sound soundtrack = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\soundtrack.wav");
 
     private GraphicsContext gc;
     private Canvas canvas;
@@ -96,6 +99,8 @@ public class BombermanGame extends Application {
         PausedScenehandler(stage);
         winHandler(stage);
         loseHandler(stage);
+
+        soundtrack.play();
 
         //createMap();
         AnimationTimer timer = new AnimationTimer() {

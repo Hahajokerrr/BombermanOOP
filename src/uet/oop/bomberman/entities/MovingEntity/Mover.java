@@ -8,11 +8,14 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Grass;
 import uet.oop.bomberman.entities.Tile.Wall;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Mover extends AnimatedEntity {
+    protected Sound dieSound = new Sound("D:\\bomberman-starter-starter-2\\res\\sound\\Die.wav");
+
     public Mover(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         state = State.STOP;

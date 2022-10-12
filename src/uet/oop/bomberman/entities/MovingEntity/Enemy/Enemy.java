@@ -12,6 +12,7 @@ import uet.oop.bomberman.entities.MovingEntity.State;
 import uet.oop.bomberman.entities.Tile.Brick;
 import uet.oop.bomberman.entities.Tile.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public abstract class Enemy extends Mover {
     protected Bomber bomber;
     protected int AfterKill;
     protected int Score;
+
 
     public Enemy(int x, int y, Image img, Bomber bomber) {
         super(x, y, img);
@@ -101,6 +103,7 @@ public abstract class Enemy extends Mover {
     public void Kill() {
         setAlive(false);
         bomber.setScore(bomber.getScore() + this.Score);
+        dieSound.play();
     }
 
     public void AfterKill() {
